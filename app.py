@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, jsonify, send_from_directory
 import uuid
 from datetime import datetime
 from game import Game
+from bot import Bot
 
 app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 86400
@@ -34,7 +35,13 @@ def room(game_id):
 @app.route('/api/create_game', methods=['POST'])
 def create_game():
     game_id = str(uuid.uuid4())[:4]
-    games[game_id] = Game(game_id)
+    game = Game(game_id)
+    games[game_id] = game
+    
+    # Create 2 bots to fill slots 2 and 3 (leaving slot 1 for the human player)
+    game.create_bot_player()
+    game.create_bot_player()
+    
     return jsonify({'game_id': game_id})
 
 @app.route('/api/join_game', methods=['POST'])
@@ -47,7 +54,15 @@ def join_game():
         return jsonify({'success': False, 'message': 'Game not found'}), 404
 
     game = games[game_id]
+    
+    # Try to join normally first
     success, player_id, error_msg = game.join_player(player_name)
+    
+    # If game is full, try to replace a bot
+    if not success and error_msg == 'Game is full':
+        bot_players = game.get_eligible_bot_players()
+        if bot_players:
+            success, player_id, error_msg = game.replace_bot_with_player(player_name)
 
     if not success:
         return jsonify({'success': False, 'message': error_msg}), 400
@@ -105,9 +120,10 @@ def disconnect():
     if player_id in game.players:
         game.players[player_id]['connected'] = False
 
-    # Check if all players are disconnected, and delete the game if so
-    all_disconnected = all(not player['connected'] for player in game.players.values())
-    if all_disconnected:
+    # Check if all human (non-bot) players are disconnected, and delete the game if so
+    human_players = [p for p in game.players.values() if not p.get('is_bot', False)]
+    all_human_disconnected = len(human_players) == 0 or all(not player['connected'] for player in human_players)
+    if all_human_disconnected and len(human_players) > 0:
         del games[game_id]
 
     return jsonify({'success': True})
@@ -117,7 +133,12 @@ def get_game_state(game_id):
     if game_id not in games:
         return jsonify({'error': 'Game not found'}), 404
 
-    return jsonify(games[game_id].get_state())
+    game = games[game_id]
+    
+    # Check if any disconnected players should be replaced with bots (10 second timeout for testing)
+    game.check_and_spawn_bots(timeout_seconds=10)
+    
+    return jsonify(game.get_state())
 
 @app.route('/api/player_hand/<game_id>/<player_id>')
 def get_player_hand(game_id, player_id):

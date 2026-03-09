@@ -42,6 +42,8 @@ class Game:
         self.winner = None  # Player ID of winner
         self.round_starter = None  # Player who starts the current round (first play)
         self.last_heartbeat = {}  # player_id -> timestamp of last activity
+        self.bots = {}  # player_id -> Bot instance for bot players
+        self.bot_disconnect_timers = {}  # player_id -> timestamp when they disconnected (for spawning bots)
 
     def create_deck(self):
         self.deck = []
@@ -279,6 +281,7 @@ class Game:
                 'score': info.get('score', 0),
                 'is_landlord': pid == self.landlord,
                 'has_passed': pid in self.passed_players,
+                'is_bot': info.get('is_bot', False),
                 'connected': info.get('connected', True)
             } for pid, info in self.players.items()},
             'current_player': self.current_player,
@@ -334,6 +337,157 @@ class Game:
         }
         self.last_heartbeat[player_id] = datetime.now().timestamp()
         return (True, player_id, None)
+
+    def create_bot_player(self):
+        """
+        Create and add a bot player to the game.
+        Returns: player_id of the bot, or None if game is full
+        """
+        from bot import Bot
+        import uuid
+        
+        # Check if game is at capacity
+        connected_players = [pid for pid in self.players if self.players[pid].get('connected', True)]
+        if len(connected_players) >= 3:
+            return None
+        
+        # Create bot with unique ID
+        player_id = f"bot_{str(uuid.uuid4())[:6]}"
+        bot = Bot(player_id)
+        
+        # Add bot to game
+        self.players[player_id] = {
+            'name': bot.name,
+            'hand': [],
+            'score': 0,
+            'is_bot': True,
+            'connected': True
+        }
+        self.bots[player_id] = bot
+        self.last_heartbeat[player_id] = datetime.now().timestamp()
+        
+        return player_id
+
+    def replace_bot_with_player(self, player_name):
+        """
+        Replace a bot player with a real player joining.
+        Returns: (success, player_id, error_message)
+        """
+        import uuid
+        
+        # Find a bot player to replace
+        bot_to_replace = None
+        for pid, player_info in self.players.items():
+            if player_info.get('is_bot', False) and player_info.get('connected', True):
+                bot_to_replace = pid
+                break
+        
+        if not bot_to_replace:
+            return (False, None, 'No bot available to replace')
+        
+        # Remove the bot and reuse the slot
+        new_player_id = str(uuid.uuid4())[:8]
+        bot_hand = self.players[bot_to_replace]['hand'].copy()
+        bot_score = self.players[bot_to_replace].get('score', 0)
+        
+        # Remove bot from tracking
+        del self.bots[bot_to_replace]
+        del self.players[bot_to_replace]
+        
+        # Add new player with bot's slot
+        self.players[new_player_id] = {
+            'name': player_name,
+            'hand': bot_hand,
+            'score': bot_score,
+            'is_bot': False,
+            'connected': True
+        }
+        self.last_heartbeat[new_player_id] = datetime.now().timestamp()
+        
+        # If the bot was the current player or landlord, update references
+        if self.current_player == bot_to_replace:
+            self.current_player = new_player_id
+        if self.landlord == bot_to_replace:
+            self.landlord = new_player_id
+        if self.round_winner == bot_to_replace:
+            self.round_winner = new_player_id
+        if self.landlord_caller == bot_to_replace:
+            self.landlord_caller = new_player_id
+        
+        # Update passed_players set
+        if bot_to_replace in self.passed_players:
+            self.passed_players.discard(bot_to_replace)
+            self.passed_players.add(new_player_id)
+        
+        return (True, new_player_id, None)
+
+    def get_eligible_bot_players(self):
+        """
+        Get list of bot player IDs that are currently in the game.
+        Returns: list of bot player IDs
+        """
+        return [pid for pid in self.bots.keys()]
+
+    def check_and_spawn_bots(self, timeout_seconds=10):
+        """
+        Check for disconnected players and spawn bots if they haven't reconnected.
+        Args:
+            timeout_seconds: Time in seconds before spawning a bot for a disconnected player
+        """
+        current_time = datetime.now().timestamp()
+        
+        # Check for disconnected players
+        for pid, player_info in list(self.players.items()):
+            if not player_info.get('connected', True) and not player_info.get('is_bot', False):
+                # Player is disconnected
+                if pid not in self.bot_disconnect_timers:
+                    # Start the timeout timer
+                    self.bot_disconnect_timers[pid] = current_time
+                elif current_time - self.bot_disconnect_timers[pid] >= timeout_seconds:
+                    # Timeout reached - spawn a bot to replace them
+                    last_heartbeat = self.last_heartbeat.get(pid, 0)
+                    player_name = player_info.get('name', 'Player')
+                    
+                    # Create bot to replace disconnected player
+                    from bot import Bot
+                    import uuid
+                    
+                    bot_player_id = f"bot_{str(uuid.uuid4())[:6]}"
+                    bot = Bot(bot_player_id, f"Bot ({player_name})")
+                    
+                    # Replace the disconnected player with bot
+                    bot_hand = self.players[pid]['hand'].copy() if self.players[pid].get('hand') else []
+                    bot_score = self.players[pid].get('score', 0)
+                    
+                    del self.players[pid]
+                    
+                    self.players[bot_player_id] = {
+                        'name': bot.name,
+                        'hand': bot_hand,
+                        'score': bot_score,
+                        'is_bot': True,
+                        'connected': True
+                    }
+                    self.bots[bot_player_id] = bot
+                    self.last_heartbeat[bot_player_id] = current_time
+                    
+                    # Update game references
+                    if self.current_player == pid:
+                        self.current_player = bot_player_id
+                    if self.landlord == pid:
+                        self.landlord = bot_player_id
+                    if self.round_winner == pid:
+                        self.round_winner = bot_player_id
+                    if self.landlord_caller == pid:
+                        self.landlord_caller = bot_player_id
+                    
+                    # Update passed_players set
+                    if pid in self.passed_players:
+                        self.passed_players.discard(pid)
+                        self.passed_players.add(bot_player_id)
+                    
+                    # Remove the disconnect timer
+                    del self.bot_disconnect_timers[pid]
 
     def bid_landlord(self, player_id, action):
         """
