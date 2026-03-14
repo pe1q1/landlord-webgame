@@ -16,102 +16,104 @@
     <meta property="og:url" content="https://pe1q1.pythonanywhere.com">
     <meta property="og:image" content="https://pe1q1.pythonanywhere.com/preview.png">
 
-    <link rel="stylesheet" href="/static/style.min.css">
+    <link rel="stylesheet" href="../static/style.min.css">
     <link rel="icon" type="image/x-icon" href="/static/media/favicon.jpg">
 </head>
 <body>
+    <div class="page">
+        <h1>Fight the Landlord</h1>
 
-
-    <div class="container">
-        <!-- Menu Screen -->
-        <div class="screen menu-screen active">
-            <h1>Fight the Landlord</h1>
-            <div class="input-group">
-                <input type="text" id="playerName" placeholder="Enter your name" value="Player">
-            </div>
-            <div>
-                <button onclick="createGame()">Create New Game</button>
-                <button onclick="showJoinScreen()">Join Game</button>
-
-                <!-- Background Music Controls -->
-                <div class="music-controls" id="musicControls">
-                    <audio id="bgMusic" autoplay preload="auto"></audio>
-                    <button id="settingsToggle" class="settings-btn" title="Settings">Settings</button>
-                    <div id="settingsPanel" class="settings-panel hidden">
-                        <p>
-                            Music
-                            <input type="range" id="volumeControl" class="volume-slider hidden" min="0" max="100" value="30" title="Volume">
-                        </p>
-                    </div>
+        <div class="container">
+            <!-- Menu Screen -->
+            <div class="screen menu-screen active">
+                <div class="input-group">
+                    <input type="text" id="playerName" placeholder="Enter your name" value="Player">
                 </div>
-            </div>
-        </div>
+                <div>
+                    <button onclick="createGame()">Create New Game</button>
+                    <button onclick="showJoinScreen()">Join Game</button>
 
-        <!-- Join Screen -->
-        <div class="screen join-screen">
-            <h1>Join Game</h1>
-            <div class="input-group">
-                <input type="text" id="playerName2" placeholder="Enter your name" value="Player">
-            </div>
-            <div class="input-group">
-                <input type="text" id="gameCode" placeholder="Enter game code">
-            </div>
-            <button onclick="joinGame()">Join</button>
-            <button onclick="showMenuScreen()">Back</button>
-        </div>
-
-        <!-- Game Screen -->
-        <div class="screen game-screen">
-            <div class="game-board" id="gameBoard" style="display:none;">
-                <div class="end-game-screen" id="endGameScreen" style="display:none;">
-                    <h2 id="endGameTitle"></h2>
-                    <div class="end-game-scores" id="endGameScores"></div>
-                    <button onclick="restartGame()" style="padding: 15px 40px; font-size: 18px; margin-top: 20px;">Play Again</button>
-                </div>
-                <div id="gameContent">
-                    <div class="players-top" id="playersTop"></div>
-                <div class="table-area" id="tableArea">
-                    <div class="table-corner top-left" id="bidPoolDisplay">Bid: 1</div>
-                    <div class="table-corner top-right" id="landlordLabel" style="display:none;">Landlord</div>
-                    <div style="position: absolute; top: 10px; right: 10px; display: flex; gap: 10px; align-items: center;">
-                        <button onclick="startGameClick()" id="startBtn" style="display:none; padding: 8px 16px; font-size: 14px;">Start Game</button>
-                    </div>
-                    <!-- Game Screen Music Controls -->
-                    <div class="game-music-controls" id="gameMusicControls">
-                        <button id="gameSettingsToggle" class="settings-btn" title="Settings"><img src="/static/media/icons/settings.svg" alt="Volume"></button>
-                        <div id="gameSettingsPanel" class="settings-panel hidden">
-                            Music
-                            <input type="range" id="gameVolumeControl" class="volume-slider" min="0" max="100" value="30" title="Volume">
+                    <!-- Background Music Controls -->
+                    <div class="music-controls" id="musicControls">
+                        <audio id="bgMusic" autoplay preload="auto"></audio>
+                        <button id="settingsToggle" class="settings-btn" title="Settings">Settings</button>
+                        <div id="settingsPanel" class="settings-panel hidden">
+                            <p>
+                                Music
+                                <input type="range" id="volumeControl" class="volume-slider hidden" min="0" max="100" value="30" title="Volume">
+                            </p>
                         </div>
                     </div>
-
-                    <div class="landlord-cards-display" id="landlordCardsDisplay"></div>
-                    <div class="table-title" id="tableTitle">Waiting to play...</div>
-                    <div class="cards-display" id="tableCards" style="min-height: 120px;"></div>
                 </div>
+            </div>
 
-                <div class="players-bottom" id="selfPlayer"></div>
+            <!-- Join Screen -->
+            <div class="screen join-screen">
+                <!-- <h1>Join Game</h1> -->
+                <div class="input-group">
+                    <input type="text" id="playerName2" placeholder="Enter your name" value="Player">
                 </div>
+                <div class="input-group">
+                    <input type="text" id="gameCode" placeholder="Enter game code">
+                </div>
+                <button onclick="joinGame()">Join</button>
+                <button onclick="showMenuScreen()">Back</button>
+            </div>
+
+            <!-- Game Screen -->
+            <div class="screen game-screen">
+                <div class="game-board" id="gameBoard" style="display:none;">
+                    <div class="end-game-screen" id="endGameScreen" style="display:none;">
+                        <h2 id="endGameTitle"></h2>
+                        <div class="end-game-scores" id="endGameScores"></div>
+                        <button onclick="restartGame()" style="padding: 15px 40px; font-size: 18px; margin-top: 20px;">Play Again</button>
+                    </div>
+                    <div id="gameContent">
+                        <div class="players-top" id="playersTop"></div>
+                    <div class="table-area" id="tableArea">
+                        <div class="table-corner top-left" id="bidPoolDisplay">Bid: 1</div>
+                        <div class="table-corner top-right" id="landlordLabel" style="display:none;">Landlord</div>
+                        <div style="position: absolute; top: 10px; right: 10px; display: flex; gap: 10px; align-items: center;">
+                            <button onclick="startGameClick()" id="startBtn" style="display:none; padding: 8px 16px; font-size: 14px;">Start Game</button>
+                        </div>
+                        <!-- Game Screen Music Controls -->
+                        <div class="game-music-controls" id="gameMusicControls">
+                            <button id="gameSettingsToggle" class="settings-btn" title="Settings"><img src="/static/media/icons/settings.svg" alt="Volume"></button>
+                            <div id="gameSettingsPanel" class="settings-panel hidden">
+                                Music
+                                <input type="range" id="gameVolumeControl" class="volume-slider" min="0" max="100" value="30" title="Volume">
+                            </div>
+                        </div>
+
+                        <div class="landlord-cards-display" id="landlordCardsDisplay"></div>
+                        <div class="table-title" id="tableTitle">Waiting to play...</div>
+                        <div class="cards-display" id="tableCards" style="min-height: 120px;"></div>
+                    </div>
+
+                    <div class="players-bottom" id="selfPlayer"></div>
+                    </div>
+                </div>
+                <p id="lobbyCodeLine" style="text-align: center; margin: auto; margin-top: 40px; margin-bottom: 10px; font-size: 14px; cursor: pointer; color: #333; display: none;" title="Click to copy lobby code">
+                Lobby Code: <span id="lobbyCodeSpan" style="font-weight: bold; font-family: monospace; background: #f0f0f0; padding: 2px 6px; border-radius: 3px;">-</span>
+                </p>
             </div>
         </div>
     </div>
 
-    <!-- Mobile Fullscreen Button -->
-    <button id="fullscreenBtn" class="fullscreen-btn" title="Toggle fullscreen" onclick="toggleFullscreen()">
-        <img id="fullscreenIcon" src="static/media/icons/fullscr-on.svg" alt="Toggle fullscreen">
-    </button>
+        <!-- Mobile Fullscreen Button -->
+        <button id="fullscreenBtn" class="fullscreen-btn" title="Toggle fullscreen" onclick="toggleFullscreen()">
+            <img id="fullscreenIcon" src="static/media/icons/fullscr-on.svg" alt="Toggle fullscreen">
+        </button>
 
-    <footer>
-        <p id="lobbyCodeLine" style="text-align: center; margin: auto; margin-top: 40px; margin-bottom: 10px; font-size: 14px; cursor: pointer; color: #333; display: none;" title="Click to copy lobby code">
-            Lobby Code: <span id="lobbyCodeSpan" style="font-weight: bold; font-family: monospace; background: #f0f0f0; padding: 2px 6px; border-radius: 3px;">-</span>
-        </p>
-        <p style="text-align: center; margin-top: 10px; font-size: 12px; color: #666;">
-            &copy; 2026 Pe1q1. All rights reserved. v1.1.4
-            <a href="#" onclick="returnToHome(event)">Return to Lobby</a>
-        </p>
-    </footer>
+        <footer>
+            <p style="text-align: center; margin-top: 10px; font-size: 12px; color: #666;">
+                &copy; 2026 Pe1q1. All rights reserved. v1.1.6
+                <a href="#" onclick="returnToHome(event)">Return to Lobby</a>
+            </p>
+        </footer>
+    
 
-    <script src="/static/script.min.js"></script>
+    <script src="../static/script.min.js"></script>
 
     <script type="application/ld+json">
     {

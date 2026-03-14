@@ -4,7 +4,16 @@ body {
     font-family: Arial, sans-serif;
     background: #fff;
     color: #000;
+    display: grid;
+    grid-template-rows: 1fr auto;
+    min-height: 100vh;
     padding: 20px;
+}
+
+.page {
+    width: 100%;
+    margin: 0 auto;
+    display: block;
 }
 
 .container {
@@ -22,6 +31,10 @@ body {
 
 h1 { text-align: center; margin-bottom: 30px; }
 
+h1.hide {
+    display: none;
+}
+
 .menu-screen {
     text-align: center;
     justify-self: center;
@@ -32,8 +45,17 @@ h1 { text-align: center; margin-bottom: 30px; }
     justify-self: center;
 }
 
+.game-screen {
+    width: 100%;
+}
+
 .input-group {
     margin: 15px 0;
+}
+
+.input-group #gameCode {
+    margin-top: 0px;
+    margin-bottom: 5px;
 }
 
 input[type="text"] {
