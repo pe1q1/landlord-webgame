@@ -263,14 +263,6 @@ class Game:
         if self.landlord:
             landlord_cards = [card.to_dict() for card in self.landlord_cards]
 
-        # Format last combo info for display
-        last_combo_display = None
-        if self.round_winner and self.last_combo_type:
-            player_name = self.players.get(self.round_winner, {}).get('name', 'Unknown')
-            combo_chain = getattr(self, 'last_combo_chain', None)
-            combo_text = self.format_combo_display(self.last_combo_type, combo_chain)
-            last_combo_display = f"{player_name} played: {combo_text}"
-
         return {
             'game_id': self.game_id,
             'players': {pid: {
@@ -287,11 +279,13 @@ class Game:
             'status': self.status,
             'last_played': [card.to_dict() for card in self.last_played] if self.last_played else None,
             'round_winner': self.round_winner,
+            'round_winner_name': self.players.get(self.round_winner, {}).get('name', 'Unknown') if self.round_winner else None,
             'round_starter': self.round_starter,
             'bid_pool': self.bid_pool,
             'take_count': self.take_count,
             'landlord_cards': landlord_cards,
-            'last_combo_display': last_combo_display,
+            'last_combo_type': self.last_combo_type,
+            'last_combo_chain': self.last_combo_chain,
             'winner': self.winner
         }
 

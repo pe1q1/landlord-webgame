@@ -1,18 +1,49 @@
-from flask import Flask, render_template, request, jsonify, send_from_directory
+from flask import Flask, render_template, request, jsonify, send_from_directory, redirect, url_for
 import uuid
 from datetime import datetime
 from game import Game
+import json
+import os
 
 app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 86400
+
+# Load translations
+LANGUAGES = {'en', 'zh'}
+TRANSLATIONS = {}
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+for lang in LANGUAGES:
+    with open(os.path.join(BASE_DIR, 'translations', f'{lang}.json'), 'r', encoding='utf-8') as f:
+        TRANSLATIONS[lang] = json.load(f)
 
 # Game state
 games = {}  # game_id -> game_state
 players = {}  # player_id -> player_info
 
+ERROR_KEY_MAP = {
+    'Invalid play': 'invalid_play',
+    'Not your turn': 'not_your_turn',
+    'Game is full': 'game_full',
+    'Game not found': 'game_not_found',
+    'Cannot pass on your turn to start a combo': 'cannot_pass_combo'
+}
+
+def translate_error(error_msg, lang='en'):
+    """Translate error message using translation key mapping"""
+    key = ERROR_KEY_MAP.get(error_msg, error_msg)
+    return TRANSLATIONS.get(lang, {}).get(key, error_msg)
+
 @app.route('/')
-def home():
-    return render_template('index.html')
+def home_redirect():
+    return redirect(url_for('home', lang='en'))
+
+@app.route('/<lang>/')
+def home(lang):
+    if lang not in LANGUAGES:
+        return redirect(url_for('home', lang='en'))
+    return render_template('index.html', translations=TRANSLATIONS[lang], lang=lang)
 
 @app.route('/google146aae795db1900e.html')
 def google_verification():
@@ -28,8 +59,14 @@ def robots():
 
 
 @app.route('/room/<game_id>')
-def room(game_id):
-    return render_template('index.html')
+def room_redirect(game_id):
+    return redirect(url_for('room', lang='en', game_id=game_id))
+
+@app.route('/<lang>/room/<game_id>')
+def room(lang, game_id):
+    if lang not in LANGUAGES:
+        return redirect(url_for('room', lang='en', game_id=game_id))
+    return render_template('index.html', translations=TRANSLATIONS[lang], lang=lang)
 
 @app.route('/api/create_game', methods=['POST'])
 def create_game():
@@ -42,15 +79,18 @@ def join_game():
     data = request.json
     game_id = data['game_id']
     player_name = data['player_name']
+    lang = data.get('lang', 'en')
 
     if game_id not in games:
-        return jsonify({'success': False, 'message': 'Game not found'}), 404
+        translated_msg = translate_error('Game not found', lang)
+        return jsonify({'success': False, 'message': translated_msg}), 404
 
     game = games[game_id]
     success, player_id, error_msg = game.join_player(player_name)
 
     if not success:
-        return jsonify({'success': False, 'message': error_msg}), 400
+        translated_msg = translate_error(error_msg, lang)
+        return jsonify({'success': False, 'message': translated_msg}), 400
 
     players[player_id] = {'game_id': game_id, 'name': player_name}
     return jsonify({
@@ -187,12 +227,14 @@ def play_cards():
     game_id = data['game_id']
     player_id = data['player_id']
     cards_data = data.get('cards', [])  # Empty means pass
+    lang = data.get('lang', 'en')
 
     game = games[game_id]
     success, error_msg = game.play_cards(player_id, cards_data)
 
     if not success:
-        return jsonify({'success': False, 'message': error_msg}), 400
+        translated_msg = translate_error(error_msg, lang)
+        return jsonify({'success': False, 'message': translated_msg}), 400
 
     return jsonify(game.get_state())
 

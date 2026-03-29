@@ -1,46 +1,51 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ lang }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="canonical" href="https://pe1q1.pythonanywhere.com/">
+    <link rel="canonical" href="https://pe1q1.eu.pythonanywhere.com/en/">
 
-    <title>Fight the Landlord - Play Doudizhu in Browser</title>
-    <meta name="description" content="Play Landlord (Dou Di Zhu) card game
-    online free in your browser. Create a private lobby and play with
-    friends instantly, no login or download needed.">
+    <title>{{ translations['title'] }}</title>
+    <meta name="description" content="{{ translations['description'] }}">
 
     <meta property="og:title" content="Fight the Landlord">
-    <meta property="og:description" content="Play Doudizhu online free with friends">
+    <meta property="og:description" content="{{ translations['description'] }}">
     <meta property="og:type" content="Game">
-    <meta property="og:url" content="https://pe1q1.pythonanywhere.com">
-    <meta property="og:image" content="https://pe1q1.pythonanywhere.com/preview.png">
+    <meta property="og:url" content="https://pe1q1.eu.pythonanywhere.com/en/">
+    <meta property="og:image" content="https://pe1q1.eu.pythonanywhere.com/preview.png">
 
-    <link rel="stylesheet" href="../static/style.min.css">
+    <link rel="stylesheet" href="/static/style.min.css">
     <link rel="icon" type="image/x-icon" href="/static/media/favicon.jpg">
 </head>
 <body>
     <div class="page">
-        <h1>Fight the Landlord</h1>
+        <h1>{{ translations['page_title'] }}</h1>
 
         <div class="container">
             <!-- Menu Screen -->
             <div class="screen menu-screen active">
                 <div class="input-group">
-                    <input type="text" id="playerName" placeholder="Enter your name" value="Player">
+                    <input type="text" id="playerName" placeholder="{{ translations['enter_name'] }}" value="{{ translations['player'] }}">
                 </div>
                 <div>
-                    <button onclick="createGame()">Create New Game</button>
-                    <button onclick="showJoinScreen()">Join Game</button>
+                    <button onclick="createGame()">{{ translations['create_game'] }}</button>
+                    <button onclick="showJoinScreen()">{{ translations['join_game'] }}</button>
 
                     <!-- Background Music Controls -->
                     <div class="music-controls" id="musicControls">
                         <audio id="bgMusic" autoplay preload="auto"></audio>
-                        <button id="settingsToggle" class="settings-btn" title="Settings">Settings</button>
+                        <button id="settingsToggle" class="settings-btn" title="{{ translations['settings'] }}">{{ translations['settings'] }}</button>
                         <div id="settingsPanel" class="settings-panel hidden">
                             <p>
-                                Music
+                                {{ translations['music'] }}
                                 <input type="range" id="volumeControl" class="volume-slider hidden" min="0" max="100" value="30" title="Volume">
+                            </p>
+                            <p>
+                                {{ translations['language'] }}
+                                <select id="languageSelector" style="margin-left: 10px; padding: 5px; font-size: 14px;">
+                                    <option value="en" {% if lang == 'en' %}selected{% endif %}>English</option>
+                                    <option value="zh" {% if lang == 'zh' %}selected{% endif %}>中文</option>
+                                </select>
                             </p>
                         </div>
                     </div>
@@ -51,13 +56,13 @@
             <div class="screen join-screen">
                 <!-- <h1>Join Game</h1> -->
                 <div class="input-group">
-                    <input type="text" id="playerName2" placeholder="Enter your name" value="Player">
+                    <input type="text" id="playerName2" placeholder="{{ translations['enter_name'] }}" value="{{ translations['player'] }}">
                 </div>
                 <div class="input-group">
-                    <input type="text" id="gameCode" placeholder="Enter game code">
+                    <input type="text" id="gameCode" placeholder="{{ translations['enter_code'] }}">
                 </div>
-                <button onclick="joinGame()">Join</button>
-                <button onclick="showMenuScreen()">Back</button>
+                <button onclick="joinGame()">{{ translations['join'] }}</button>
+                <button onclick="showMenuScreen()">{{ translations['back'] }}</button>
             </div>
 
             <!-- Game Screen -->
@@ -74,27 +79,36 @@
                         <div class="table-corner top-left" id="bidPoolDisplay">Bid: 1</div>
                         <div class="table-corner top-right" id="landlordLabel" style="display:none;">Landlord</div>
                         <div style="position: absolute; top: 10px; right: 10px; display: flex; gap: 10px; align-items: center;">
-                            <button onclick="startGameClick()" id="startBtn" style="display:none; padding: 8px 16px; font-size: 14px;">Start Game</button>
+                            <button onclick="startGameClick()" id="startBtn" style="display:none; padding: 8px 16px; font-size: 14px;">{{ translations['start_game'] }}</button>
                         </div>
                         <!-- Game Screen Music Controls -->
                         <div class="game-music-controls" id="gameMusicControls">
-                            <button id="gameSettingsToggle" class="settings-btn" title="Settings"><img src="/static/media/icons/settings.svg" alt="Volume"></button>
+                            <button id="gameSettingsToggle" class="settings-btn" title="{{ translations['settings'] }}"><img src="/static/media/icons/settings.svg" alt="Volume"></button>
                             <div id="gameSettingsPanel" class="settings-panel hidden">
-                                Music
-                                <input type="range" id="gameVolumeControl" class="volume-slider" min="0" max="100" value="30" title="Volume">
+                                <p>
+                                    {{ translations['music'] }}
+                                    <input type="range" id="gameVolumeControl" class="volume-slider" min="0" max="100" value="30" title="Volume">
+                                </p>
+                                <p>
+                                    {{ translations['language'] }}
+                                    <select id="gameLanguageSelector" style="margin-left: 10px; padding: 5px; font-size: 14px;">
+                                        <option value="en" {% if lang == 'en' %}selected{% endif %}>English</option>
+                                        <option value="zh" {% if lang == 'zh' %}selected{% endif %}>中文</option>
+                                    </select>
+                                </p>
                             </div>
                         </div>
 
                         <div class="landlord-cards-display" id="landlordCardsDisplay"></div>
-                        <div class="table-title" id="tableTitle">Waiting to play...</div>
+                        <div class="table-title" id="tableTitle">{{ translations['waiting'] }}</div>
                         <div class="cards-display" id="tableCards" style="min-height: 120px;"></div>
                     </div>
 
                     <div class="players-bottom" id="selfPlayer"></div>
                     </div>
                 </div>
-                <p id="lobbyCodeLine" style="text-align: center; margin: auto; margin-top: 40px; margin-bottom: 10px; font-size: 14px; cursor: pointer; color: #333; display: none;" title="Click to copy lobby code">
-                Lobby Code: <span id="lobbyCodeSpan" style="font-weight: bold; font-family: monospace; background: #f0f0f0; padding: 2px 6px; border-radius: 3px;">-</span>
+                <p id="lobbyCodeLine" style="text-align: center; margin: auto; margin-top: 40px; margin-bottom: 10px; font-size: 14px; cursor: pointer; color: #333; display: none;" title="{{ translations['click_to_copy'] }}">
+                {{ translations['game_code'] }}: <span id="lobbyCodeSpan" style="font-weight: bold; font-family: 'Courier New', monospace; background: #f0f0f0; padding: 2px 6px; border-radius: 3px;">-</span>
                 </p>
             </div>
         </div>
@@ -102,18 +116,23 @@
 
         <!-- Mobile Fullscreen Button -->
         <button id="fullscreenBtn" class="fullscreen-btn" title="Toggle fullscreen" onclick="toggleFullscreen()">
-            <img id="fullscreenIcon" src="static/media/icons/fullscr-on.svg" alt="Toggle fullscreen">
+            <img id="fullscreenIcon" src="/static/media/icons/fullscr-on.svg" alt="Toggle fullscreen">
         </button>
 
         <footer>
             <p style="text-align: center; margin-top: 10px; font-size: 12px; color: #666;">
-                &copy; 2026 Pe1q1. All rights reserved. v1.1.6
-                <a href="#" onclick="returnToHome(event)">Return to Lobby</a>
+                &copy; 2026 Pe1q1. All rights reserved. v1.2.0
+                <a href="#" onclick="returnToHome(event)">{{ translations['return_to_lobby'] }}</a>
             </p>
         </footer>
     
 
-    <script src="../static/script.min.js"></script>
+    <script>
+        const translations = JSON.parse('{{ translations | tojson | safe }}');
+        const currentLang = '{{ lang }}';
+    </script>
+
+    <script src="/static/script.min.js"></script>
 
     <script type="application/ld+json">
     {
