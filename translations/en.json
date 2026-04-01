@@ -9,15 +9,18 @@
   "settings": "Settings",
   "music": "Music",
   "language": "Language",
+
   "enter_code": "Enter game code",
   "join": "Join",
   "back": "Back",
+
   "start_game": "Start Game",
   "bid": "Bid:",
   "landlord": "Landlord",
   "peasant": "Peasant",
   "pass": "Pass",
   "play": "Play",
+
   "waiting": "Waiting to play...",
   "waiting_players": "Waiting for players...",
   "waiting_landlord": "Waiting for call...",
@@ -46,6 +49,7 @@
   "take_landlord": "Take",
   "wins": "Wins!",
   "played": "played",
+
   "combo_single": "Single",
   "combo_pair": "Pair",
   "combo_triple": "Triple",
@@ -53,11 +57,15 @@
   "combo_triple_pair": "Triple + Pair",
   "combo_straight": "Straight",
   "combo_pair_straight": "Pair Straight",
-  "combo_triple_straight": "Triple Straight",
-  "combo_triple_straight_single": "Airplane",
+  "combo_triple_straight": "Airplane",
+  "combo_triple_straight_single": "Airplane with Wings",
   "combo_triple_straight_pair": "Airplane with Wings",
   "combo_four_two_single": "Four + Two",
   "combo_four_two_pair": "Four + Two Pairs",
   "combo_bomb": "Bomb",
-  "combo_rocket": "Rocket"
+  "combo_rocket": "Rocket",
+
+  "how_to_play": "How to Play",
+  "how_to_play_title": "Doudizhu - How to Play",
+  "how_to_play_text": "<h3>1. Dealing</h3> <p>A deck of 54 cards is used. Each player receives 17 cards, and 3 cards are set aside as the kitty. Players cannot see the kitty cards before the landlord is determined.</p> <br> <h3>2. Bidding</h3> <p>Bidding goes in turn order. Each player may choose to \"Call\" or \"Pass\". If a player calls, the remaining players each get one chance to \"Take\" the landlord role. The last player to bid becomes the landlord. Players who have already passed cannot take. If all players pass, the cards are redealt and bidding starts over until someone becomes the landlord.</p> <br> <h3>3. Playing</h3> <p>The 3 kitty cards are revealed to all players and given to the landlord. The landlord plays first, then play continues counter-clockwise. On your turn you may either \"Pass\" or play a hand that beats the previous player's hand.</p> <br> <h3>4. Card Types</h3> <p>Rocket: Both jokers (Big and Small Joker). The strongest hand.<br> Bomb: Four cards of the same rank (e.g. four 7s).<br> Single: One card (e.g. 5♥).<br> Pair: Two cards of the same rank (e.g. 4♣ + 4♦).<br> Triple: Three cards of the same rank (e.g. three Jacks).<br> Triple + one: Three of a kind plus one single card or one pair. e.g. 333+6 or 444+99.<br> Straight: Five or more consecutive singles (e.g. 45678 or 78910JQK). No 2s or jokers.<br> Pair Straight: Three or more consecutive pairs (e.g. 334455, 7788991010JJ). No 2s or jokers.<br> Airplane: Two or more consecutive triples (e.g. 333444, 555666777888). No 2s or jokers.<br> Airplane with Wings: Consecutive triples + equal number of singles or pairs (e.g. 444555+79 or 3334445557799JJ).<br> Four + Two: Four of a kind + two singles or pairs (e.g. 5555+3+8 or 4444+55+77). Note: this is not a bomb.</p> <br> <h3>5. Hand Rankings</h3> <p>The Rocket beats everything. Bombs beat all non-rocket hands; between bombs, higher rank wins. All other hands must match in type and card count to be compared. Singles are ranked: Big(Red) Joker > Small(Black) Joker > 2 > A > K > Q > J > 10 > 9 > 8 > 7 > 6 > 5 > 4 > 3, suits don't matter. Pairs and triples are compared by rank. Sequences are compared by their highest card. For Airplane with Wings and Four + Two, only the triple or four-of-a-kind part determines ranking, the extra cards don't count.</p> <br> <h3>6. Winning</h3> <p>The game ends when any player plays their last card. If the landlord runs out of cards first, the landlord wins. Otherwise, the other two players win.</p>"
 }

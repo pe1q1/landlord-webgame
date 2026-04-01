@@ -30,6 +30,8 @@
                 <div>
                     <button onclick="createGame()">{{ translations['create_game'] }}</button>
                     <button onclick="showJoinScreen()">{{ translations['join_game'] }}</button>
+                    <br>
+                    <button onclick="openHowToPlay()">{{ translations['how_to_play'] }}</button>
 
                     <!-- Background Music Controls -->
                     <div class="music-controls" id="musicControls">
@@ -98,7 +100,9 @@
                                 </p>
                             </div>
                         </div>
-
+                        <button class="howToPlayTable table-corner bottom-right" onclick="openHowToPlay()">
+                            <img src="/static/media/icons/information.png" alt="HowToPlay" width="24px" height="24px">
+                        </button>
                         <div class="landlord-cards-display" id="landlordCardsDisplay"></div>
                         <div class="table-title" id="tableTitle">{{ translations['waiting'] }}</div>
                         <div class="cards-display" id="tableCards" style="min-height: 120px;"></div>
@@ -119,9 +123,21 @@
             <img id="fullscreenIcon" src="/static/media/icons/fullscr-on.svg" alt="Toggle fullscreen">
         </button>
 
+        <!-- How to Play -->
+        <div id="howToPlay" class="hidden">
+            <div class="howToPlayBox">
+                <div class="howToPlayHead">
+                    <h2>{{ translations['how_to_play_title'] }}</h2>
+                    <button class="howToPlayCls" title="Close" onclick="closeHowToPlay()">X</button>
+                </div>
+                <div class="howToPlayBody">{{ translations['how_to_play_text'] | safe }}</div>
+            </div>
+        </div>
+
+
         <footer>
             <p style="text-align: center; margin-top: 10px; font-size: 12px; color: #666;">
-                &copy; 2026 Pe1q1. All rights reserved. v1.2.0
+                &copy; 2026 Pe1q1. All rights reserved. v1.2.1
                 <a href="#" onclick="returnToHome(event)">{{ translations['return_to_lobby'] }}</a>
             </p>
         </footer>
@@ -144,6 +160,3 @@
     </script>
 </body>
 </html>
-
-
-
