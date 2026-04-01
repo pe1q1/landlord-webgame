@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="canonical" href="https://pe1q1.eu.pythonanywhere.com/en/">
 
-    <title>{{ translations['title'] }}</title>
-    <meta name="description" content="{{ translations['description'] }}">
+    <title data-i18n="title"></title>
+    <meta name="description" data-i18n-content="description">
 
     <meta property="og:title" content="Fight the Landlord">
-    <meta property="og:description" content="{{ translations['description'] }}">
+    <meta property="og:description" data-i18n-content="description">
     <meta property="og:type" content="Game">
     <meta property="og:url" content="https://pe1q1.eu.pythonanywhere.com/en/">
     <meta property="og:image" content="https://pe1q1.eu.pythonanywhere.com/preview.png">
@@ -19,31 +19,30 @@
 </head>
 <body>
     <div class="page">
-        <h1>{{ translations['page_title'] }}</h1>
+        <h1 data-i18n="page_title"></h1>
 
         <div class="container">
             <!-- Menu Screen -->
             <div class="screen menu-screen active">
                 <div class="input-group">
-                    <input type="text" id="playerName" placeholder="{{ translations['enter_name'] }}" value="{{ translations['player'] }}">
+                    <input type="text" id="playerName" data-i18n-placeholder="enter_name" data-i18n-value="player">
                 </div>
                 <div>
-                    <button onclick="createGame()">{{ translations['create_game'] }}</button>
-                    <button onclick="showJoinScreen()">{{ translations['join_game'] }}</button>
+                    <button onclick="createGame()" data-i18n="create_game"></button>
+                    <button onclick="showJoinScreen()" data-i18n="join_game"></button>
                     <br>
-                    <button onclick="openHowToPlay()">{{ translations['how_to_play'] }}</button>
+                    <button onclick="openHowToPlay()" data-i18n="how_to_play"></button>
 
-                    <!-- Background Music Controls -->
                     <div class="music-controls" id="musicControls">
                         <audio id="bgMusic" autoplay preload="auto"></audio>
-                        <button id="settingsToggle" class="settings-btn" title="{{ translations['settings'] }}">{{ translations['settings'] }}</button>
+                        <button id="settingsToggle" class="settings-btn" data-i18n="settings" data-i18n-title="settings"></button>
                         <div id="settingsPanel" class="settings-panel hidden">
                             <p>
-                                {{ translations['music'] }}
-                                <input type="range" id="volumeControl" class="volume-slider hidden" min="0" max="100" value="30" title="Volume">
+                                <span data-i18n="music"></span>
+                                <input type="range" id="volumeControl" class="volume-slider hidden" min="0" max="100" value="30" data-i18n-title="volume">
                             </p>
                             <p>
-                                {{ translations['language'] }}
+                                <span data-i18n="language"></span>
                                 <select id="languageSelector" style="margin-left: 10px; padding: 5px; font-size: 14px;">
                                     <option value="en" {% if lang == 'en' %}selected{% endif %}>English</option>
                                     <option value="zh" {% if lang == 'zh' %}selected{% endif %}>中文</option>
@@ -56,15 +55,14 @@
 
             <!-- Join Screen -->
             <div class="screen join-screen">
-                <!-- <h1>Join Game</h1> -->
                 <div class="input-group">
-                    <input type="text" id="playerName2" placeholder="{{ translations['enter_name'] }}" value="{{ translations['player'] }}">
+                    <input type="text" id="playerName2" data-i18n-placeholder="enter_name" data-i18n-value="player">
                 </div>
                 <div class="input-group">
-                    <input type="text" id="gameCode" placeholder="{{ translations['enter_code'] }}">
+                    <input type="text" id="gameCode" data-i18n-placeholder="enter_code">
                 </div>
-                <button onclick="joinGame()">{{ translations['join'] }}</button>
-                <button onclick="showMenuScreen()">{{ translations['back'] }}</button>
+                <button onclick="joinGame()" data-i18n="join"></button>
+                <button onclick="showMenuScreen()" data-i18n="back"></button>
             </div>
 
             <!-- Game Screen -->
@@ -73,78 +71,72 @@
                     <div class="end-game-screen" id="endGameScreen" style="display:none;">
                         <h2 id="endGameTitle"></h2>
                         <div class="end-game-scores" id="endGameScores"></div>
-                        <button onclick="restartGame()" style="padding: 15px 40px; font-size: 18px; margin-top: 20px;">Play Again</button>
+                        <button onclick="restartGame()" style="padding: 15px 40px; font-size: 18px; margin-top: 20px;" data-i18n="play_again"></button>
                     </div>
                     <div id="gameContent">
                         <div class="players-top" id="playersTop"></div>
-                    <div class="table-area" id="tableArea">
-                        <div class="table-corner top-left" id="bidPoolDisplay">Bid: 1</div>
-                        <div class="table-corner top-right" id="landlordLabel" style="display:none;">Landlord</div>
-                        <div style="position: absolute; top: 10px; right: 10px; display: flex; gap: 10px; align-items: center;">
-                            <button onclick="startGameClick()" id="startBtn" style="display:none; padding: 8px 16px; font-size: 14px;">{{ translations['start_game'] }}</button>
-                        </div>
-                        <!-- Game Screen Music Controls -->
-                        <div class="game-music-controls" id="gameMusicControls">
-                            <button id="gameSettingsToggle" class="settings-btn" title="{{ translations['settings'] }}"><img src="/static/media/icons/settings.svg" alt="Volume"></button>
-                            <div id="gameSettingsPanel" class="settings-panel hidden">
-                                <p>
-                                    {{ translations['music'] }}
-                                    <input type="range" id="gameVolumeControl" class="volume-slider" min="0" max="100" value="30" title="Volume">
-                                </p>
-                                <p>
-                                    {{ translations['language'] }}
-                                    <select id="gameLanguageSelector" style="margin-left: 10px; padding: 5px; font-size: 14px;">
-                                        <option value="en" {% if lang == 'en' %}selected{% endif %}>English</option>
-                                        <option value="zh" {% if lang == 'zh' %}selected{% endif %}>中文</option>
-                                    </select>
-                                </p>
+                        <div class="table-area" id="tableArea">
+                            <div class="table-corner top-left" id="bidPoolDisplay" data-i18n-prefix="bid"></div>
+                            <div class="table-corner top-right" id="landlordLabel" style="display:none;" data-i18n="landlord"></div>
+                            <div style="position: absolute; top: 10px; right: 10px; display: flex; gap: 10px; align-items: center;">
+                                <button onclick="startGameClick()" id="startBtn" style="display:none; padding: 8px 16px; font-size: 14px;" data-i18n="start_game"></button>
                             </div>
+                            <div class="game-music-controls" id="gameMusicControls">
+                                <button id="gameSettingsToggle" class="settings-btn" data-i18n-title="settings"><img src="/static/media/icons/settings.svg" alt="Volume"></button>
+                                <div id="gameSettingsPanel" class="settings-panel hidden">
+                                    <p>
+                                        <span data-i18n="music"></span>
+                                        <input type="range" id="gameVolumeControl" class="volume-slider" min="0" max="100" value="30" data-i18n-title="volume">
+                                    </p>
+                                    <p>
+                                        <span data-i18n="language"></span>
+                                        <select id="gameLanguageSelector" style="margin-left: 10px; padding: 5px; font-size: 14px;">
+                                            <option value="en" {% if lang == 'en' %}selected{% endif %}>English</option>
+                                            <option value="zh" {% if lang == 'zh' %}selected{% endif %}>中文</option>
+                                        </select>
+                                    </p>
+                                </div>
+                            </div>
+                            <button class="howToPlayTable table-corner bottom-right" onclick="openHowToPlay()" data-i18n-title="how_to_play">
+                                <img src="/static/media/icons/information.png" alt="HowToPlay" width="24px" height="24px">
+                            </button>
+                            <div class="landlord-cards-display" id="landlordCardsDisplay"></div>
+                            <div class="table-title" id="tableTitle" data-i18n="waiting"></div>
+                            <div class="cards-display" id="tableCards" style="min-height: 120px;"></div>
                         </div>
-                        <button class="howToPlayTable table-corner bottom-right" onclick="openHowToPlay()">
-                            <img src="/static/media/icons/information.png" alt="HowToPlay" width="24px" height="24px">
-                        </button>
-                        <div class="landlord-cards-display" id="landlordCardsDisplay"></div>
-                        <div class="table-title" id="tableTitle">{{ translations['waiting'] }}</div>
-                        <div class="cards-display" id="tableCards" style="min-height: 120px;"></div>
-                    </div>
-
-                    <div class="players-bottom" id="selfPlayer"></div>
+                        <div class="players-bottom" id="selfPlayer"></div>
                     </div>
                 </div>
-                <p id="lobbyCodeLine" style="text-align: center; margin: auto; margin-top: 40px; margin-bottom: 10px; font-size: 14px; cursor: pointer; color: #333; display: none;" title="{{ translations['click_to_copy'] }}">
-                {{ translations['game_code'] }}: <span id="lobbyCodeSpan" style="font-weight: bold; font-family: 'Courier New', monospace; background: #f0f0f0; padding: 2px 6px; border-radius: 3px;">-</span>
+                <p id="lobbyCodeLine" style="text-align: center; margin: auto; margin-top: 40px; margin-bottom: 10px; font-size: 14px; cursor: pointer; color: #333; display: none;" data-i18n-title="click_to_copy">
+                    <span data-i18n="game_code"></span>: <span id="lobbyCodeSpan" style="font-weight: bold; font-family: 'Courier New', monospace; background: #f0f0f0; padding: 2px 6px; border-radius: 3px;">-</span>
                 </p>
             </div>
         </div>
     </div>
 
-        <!-- Mobile Fullscreen Button -->
-        <button id="fullscreenBtn" class="fullscreen-btn" title="Toggle fullscreen" onclick="toggleFullscreen()">
-            <img id="fullscreenIcon" src="/static/media/icons/fullscr-on.svg" alt="Toggle fullscreen">
-        </button>
+    <button id="fullscreenBtn" class="fullscreen-btn" title="Toggle fullscreen" onclick="toggleFullscreen()">
+        <img id="fullscreenIcon" src="/static/media/icons/fullscr-on.svg" alt="Toggle fullscreen">
+    </button>
 
-        <!-- How to Play -->
-        <div id="howToPlay" class="hidden">
-            <div class="howToPlayBox">
-                <div class="howToPlayHead">
-                    <h2>{{ translations['how_to_play_title'] }}</h2>
-                    <button class="howToPlayCls" title="Close" onclick="closeHowToPlay()">X</button>
-                </div>
-                <div class="howToPlayBody">{{ translations['how_to_play_text'] | safe }}</div>
+    <div id="howToPlay" class="hidden">
+        <div class="howToPlayBox">
+            <div class="howToPlayHead">
+                <h2 data-i18n="how_to_play_title"></h2>
+                <button class="howToPlayCls" title="Close" onclick="closeHowToPlay()">X</button>
             </div>
+            <div class="howToPlayBody" data-i18n="how_to_play_text"></div>
         </div>
+    </div>
 
-
-        <footer>
-            <p style="text-align: center; margin-top: 10px; font-size: 12px; color: #666;">
-                &copy; 2026 Pe1q1. All rights reserved. v1.2.1
-                <a href="#" onclick="returnToHome(event)">{{ translations['return_to_lobby'] }}</a>
-            </p>
-        </footer>
-    
+    <footer>
+        <p style="text-align: center; margin-top: 10px; font-size: 12px; color: #666;">
+            &copy; 2026 Pe1q1. All rights reserved. v1.2.2
+            <a href="#" onclick="returnToHome(event)" data-i18n="return_to_lobby"></a>
+        </p>
+    </footer>
 
     <script>
-        const translations = JSON.parse('{{ translations | tojson | safe }}');
+        let translations = {{ translations | tojson }};
         const currentLang = '{{ lang }}';
     </script>
 

@@ -1,5 +1,10 @@
 # Changelog
 
+#### v1.2.2 - 2026-04-02
+
+* Updated language selector to reload free
+* Fixed overwriting of usernames on translation
+
 #### v1.2.1 - 2026-03-31
 
 * Added instructions (How to Play)

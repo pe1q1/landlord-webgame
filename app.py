@@ -15,7 +15,7 @@ TRANSLATIONS = {}
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 for lang in LANGUAGES:
-    with open(os.path.join(BASE_DIR, 'translations', f'{lang}.json'), 'r', encoding='utf-8') as f:
+    with open(os.path.join(BASE_DIR, 'static', 'translations', f'{lang}.json'), 'r', encoding='utf-8') as f:
         TRANSLATIONS[lang] = json.load(f)
 
 # Game state
