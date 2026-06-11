@@ -1,2 +1,3 @@
 # landlord-webgame
-Python/Flask web implementation of the card game Fight the Landlord
+
+Python/Flask web implementation of the card game Fight the Landlord (Dou Di Zhu)

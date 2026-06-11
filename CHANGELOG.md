@@ -1,5 +1,9 @@
 # Changelog
 
+#### v1.2.3 - 2026-06-11
+
+* Fixed Google indexing of /zh/ page via dynamic canonical link
+
 #### v1.2.2 - 2026-04-02
 
 * Updated language selector to reload free

@@ -239,4 +239,4 @@ def play_cards():
     return jsonify(game.get_state())
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host="0.0.0.0")

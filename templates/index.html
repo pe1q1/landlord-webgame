@@ -3,7 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="canonical" href="https://pe1q1.eu.pythonanywhere.com/en/">
+
+    <link rel="canonical" href="https://pe1q1.eu.pythonanywhere.com/{{ lang }}/">
+    <link rel="alternate" hreflang="en" href="https://pe1q1.eu.pythonanywhere.com/en/">
+    <link rel="alternate" hreflang="zh" href="https://pe1q1.eu.pythonanywhere.com/zh/">
+    <link rel="alternate" hreflang="x-default" href="https://pe1q1.eu.pythonanywhere.com/en/">
 
     <title data-i18n="title"></title>
     <meta name="description" data-i18n-content="description">
@@ -11,7 +15,7 @@
     <meta property="og:title" content="Fight the Landlord">
     <meta property="og:description" data-i18n-content="description">
     <meta property="og:type" content="Game">
-    <meta property="og:url" content="https://pe1q1.eu.pythonanywhere.com/en/">
+    <meta property="og:url" content="https://pe1q1.eu.pythonanywhere.com/{{ lang }}/">
     <meta property="og:image" content="https://pe1q1.eu.pythonanywhere.com/preview.png">
 
     <link rel="stylesheet" href="/static/style.min.css">
@@ -130,7 +134,7 @@
 
     <footer>
         <p style="text-align: center; margin-top: 10px; font-size: 12px; color: #666;">
-            &copy; 2026 Pe1q1. All rights reserved. v1.2.2
+            &copy; 2026 Pe1q1. All rights reserved. v1.2.3
             <a href="#" onclick="returnToHome(event)" data-i18n="return_to_lobby"></a>
         </p>
     </footer>
