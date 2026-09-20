@@ -45,6 +45,60 @@ h1.hide {
     justify-self: center;
 }
 
+.lobby-browser {
+    border: 1px solid #000;
+    padding: 10px;
+    padding-bottom: 5px;
+    margin-top: 20px;
+    /*background: #f0f0f0;*/
+    width: 40vw;
+    min-width: 100%;
+}
+
+.lobby-browser h2{
+    margin-bottom: 10px;
+}
+
+.lobby-browser-header {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.lobby-browser-header h2 {
+    grid-column: 2;
+}
+
+.lobby-browser-refresh {
+    grid-column: 3;
+    margin: auto 0;
+    margin-left: auto;
+    padding: 5px;
+}
+
+.lobby-browser-refresh img {
+    display: block;
+    height: 1.5em;
+}
+
+.lobby-element {
+    border: 1px solid #000;
+    display: flex;
+    padding: 5px;
+    background: #fff;
+    margin-bottom: 5px;
+}
+
+.lobby-element * {
+    margin: auto 0;
+}
+
+.lobby-element .player-count {
+    margin-left: auto;
+    margin-right: 10px;
+}
+
 .game-screen {
     width: 100%;
 }

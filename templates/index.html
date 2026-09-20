@@ -67,6 +67,22 @@
                 </div>
                 <button onclick="joinGame()" data-i18n="join"></button>
                 <button onclick="showMenuScreen()" data-i18n="back"></button>
+
+                <div class="lobby-browser">
+                    <div class="lobby-browser-header">
+                        <h2>Lobby Browser</h2>
+                        <button class="lobby-browser-refresh" onclick="reloadLobbyBrowser()"><img src="/static/media/icons/reload.png" alt="reload"></button>
+                    </div>
+                    
+                    <div class="lobby-browser-main">
+                        <p>An error has occured</p>
+                        <!--<div class="lobby-element">
+                            <h4>TEST</h4>
+                            <h4 class="player-count">0/3</h4>
+                            <button onclick="joinGame()" data-i18n="join"></button>
+                        </div>-->
+                    </div>
+                </div>
             </div>
 
             <!-- Game Screen -->
@@ -134,7 +150,7 @@
 
     <footer>
         <p style="text-align: center; margin-top: 10px; font-size: 12px; color: #666;">
-            &copy; 2026 Pe1q1. All rights reserved. v1.2.3
+            &copy; 2026 Pe1q1. All rights reserved. v1.3.0
             <a href="#" onclick="returnToHome(event)" data-i18n="return_to_lobby"></a>
         </p>
     </footer>

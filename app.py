@@ -1,9 +1,10 @@
 from flask import Flask, render_template, request, jsonify, send_from_directory, redirect, url_for
 import uuid
-from datetime import datetime
+import time
 from game import Game
 import json
 import os
+import threading
 
 app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 86400
@@ -99,6 +100,23 @@ def join_game():
         'game_state': game.get_state()
     })
 
+@app.route('/api/reload_lobbies', methods=['GET'])
+def reload_lobbies():
+    print(players)
+    print(games)
+    games_to_send = {}
+
+    for game in games:
+        player_count = 0
+
+        for player in games[game].players:
+            if games[game].players[player]["connected"]:
+                player_count += 1
+
+        games_to_send.update({game: player_count})
+
+    return jsonify({"lobbies": games_to_send})
+
 @app.route('/api/heartbeat', methods=['POST'])
 def heartbeat():
     data = request.json
@@ -111,7 +129,7 @@ def heartbeat():
     game = games[game_id]
     if player_id in game.players:
         game.players[player_id]['connected'] = True
-        game.last_heartbeat[player_id] = datetime.now().timestamp()
+        game.last_heartbeat[player_id] = time.monotonic()
 
     return jsonify({'success': True})
 
@@ -238,5 +256,37 @@ def play_cards():
 
     return jsonify(game.get_state())
 
+def player_connection_gc():
+    while True:
+        now = time.monotonic()
+
+        for game in list(games):
+            heartbeat_list = games[game].last_heartbeat
+            for player in heartbeat_list:
+                print(player, heartbeat_list[player])
+                if now - heartbeat_list[player] > 15 and games[game].players[player]["connected"]:
+                    print(f"timeout {player}")
+                    games[game].players[player]["connected"] = False
+
+                        # Check if all players are disconnected, and delete the game if so
+                    all_disconnected = all(not player['connected'] for player in games[game].players.values())
+                    if all_disconnected:
+                        print(f"deleting {games[game]}")
+                        del games[game]
+                        break
+                if heartbeat_list[player] > 1789000000 and games[game].players[player]["connected"]:
+                    games[game].last_heartbeat[player] = time.monotonic()
+
+        time.sleep(3)
+
 if __name__ == '__main__':
-    app.run(debug=True, host="0.0.0.0")
+    threading.Thread(
+        target=player_connection_gc,
+        daemon=True
+    ).start()
+
+    app.run(
+        debug=True, 
+        use_reloader=False, 
+        host="0.0.0.0"
+    )
