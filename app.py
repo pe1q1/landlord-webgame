@@ -263,15 +263,15 @@ def player_connection_gc():
         for game in list(games):
             heartbeat_list = games[game].last_heartbeat
             for player in heartbeat_list:
-                print(player, heartbeat_list[player])
+                #print(player, heartbeat_list[player])
                 if now - heartbeat_list[player] > 15 and games[game].players[player]["connected"]:
-                    print(f"timeout {player}")
+                    #print(f"timeout {player}")
                     games[game].players[player]["connected"] = False
 
                         # Check if all players are disconnected, and delete the game if so
                     all_disconnected = all(not player['connected'] for player in games[game].players.values())
                     if all_disconnected:
-                        print(f"deleting {games[game]}")
+                        #print(f"deleting {games[game]}")
                         del games[game]
                         break
                 if heartbeat_list[player] > 1789000000 and games[game].players[player]["connected"]:

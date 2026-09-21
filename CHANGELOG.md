@@ -1,5 +1,10 @@
 # Changelog
 
+#### v1.3.1 - 2026-09-21
+
+* Added lobby  browser chinese translations
+* Fixed front end lobby browser error detection
+
 #### v1.3.0 - 2026-09-21
 
 * Added lobby browser
