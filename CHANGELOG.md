@@ -1,5 +1,10 @@
 # Changelog
 
+#### v1.3.2 - 2026-09-21
+
+* Fixed ghost players and reconnect when full
+* Fixed connection GC
+
 #### v1.3.1 - 2026-09-21
 
 * Added lobby  browser chinese translations
@@ -8,7 +13,7 @@
 #### v1.3.0 - 2026-09-21
 
 * Added lobby browser
-* Fixed mobile disconnects and ghost stated
+* Fixed mobile disconnects and ghost states
 * Added connection timeout/garbage collector
 
 #### v1.2.3 - 2026-06-11
@@ -52,10 +57,10 @@
 * Added reconnection logic
 * Changed lobby code from 8 to 4 digits
 
-#### v1.0.1 - 2025-01
+#### v1.0.1 - 2026-01
 
 * Added music
 
-#### v1.0.0 - 2025-01-12
+#### v1.0.0 - 2026-01-12
 
 * Uploaded the game to Pythonanywhere

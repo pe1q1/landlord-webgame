@@ -5,6 +5,7 @@ from game import Game
 import json
 import os
 import threading
+import logging
 
 app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 86400
@@ -102,11 +103,14 @@ def join_game():
 
 @app.route('/api/reload_lobbies', methods=['GET'])
 def reload_lobbies():
-    print(players)
-    print(games)
+    #print(players)
+    #print(games)
+    
     games_to_send = {}
 
     for game in games:
+        #print(games[game].players)
+
         player_count = 0
 
         for player in games[game].players:
@@ -162,6 +166,9 @@ def disconnect():
     game = games[game_id]
     if player_id in game.players:
         game.players[player_id]['connected'] = False
+
+    if player_id in players:
+        del players[player_id]
 
     # Check if all players are disconnected, and delete the game if so
     all_disconnected = all(not player['connected'] for player in game.players.values())
@@ -257,34 +264,44 @@ def play_cards():
     return jsonify(game.get_state())
 
 def player_connection_gc():
+    now = time.monotonic()
+
+    for game in list(games):
+        heartbeat_list = games[game].last_heartbeat
+        for player in heartbeat_list:
+            #print(player, heartbeat_list[player])
+            if now - heartbeat_list[player] > 9 and games[game].players[player]["connected"]:
+                #print(f"timeout {player}")
+                games[game].players[player]["connected"] = False
+                del players[player]
+
+                    # Check if all players are disconnected, and delete the game if so
+                all_disconnected = all(not player['connected'] for player in games[game].players.values())
+                if all_disconnected:
+                    #print(f"deleting {games[game]}")
+                    del games[game]
+                    print(f"[{now} - GC] game {game} killed")
+                    break
+            if heartbeat_list[player] > 1789000000 and games[game].players[player]["connected"]:
+                games[game].last_heartbeat[player] = time.monotonic()
+
+def local_loop():
     while True:
-        now = time.monotonic()
-
-        for game in list(games):
-            heartbeat_list = games[game].last_heartbeat
-            for player in heartbeat_list:
-                #print(player, heartbeat_list[player])
-                if now - heartbeat_list[player] > 15 and games[game].players[player]["connected"]:
-                    #print(f"timeout {player}")
-                    games[game].players[player]["connected"] = False
-
-                        # Check if all players are disconnected, and delete the game if so
-                    all_disconnected = all(not player['connected'] for player in games[game].players.values())
-                    if all_disconnected:
-                        #print(f"deleting {games[game]}")
-                        del games[game]
-                        break
-                if heartbeat_list[player] > 1789000000 and games[game].players[player]["connected"]:
-                    games[game].last_heartbeat[player] = time.monotonic()
+        try:
+            player_connection_gc()
+        except Exception as e:
+            print(e)
 
         time.sleep(3)
 
+
 if __name__ == '__main__':
     threading.Thread(
-        target=player_connection_gc,
+        target=local_loop,
         daemon=True
     ).start()
 
+    logging.getLogger("werkzeug").setLevel(logging.ERROR)
     app.run(
         debug=True, 
         use_reloader=False, 

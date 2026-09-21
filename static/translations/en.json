@@ -72,5 +72,6 @@
 
   "lobby_browser_title": "Lobby Browser",
   "error_lobby_refresh": "An error has occured, try reloading the page and check your internet connection",
-  "no_lobbies_found": "No lobbies found"
+  "no_lobbies_found": "No lobbies found",
+  "game_full_disconnect": "Unable to reconnect"
 }

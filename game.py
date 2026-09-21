@@ -1,5 +1,5 @@
 import random
-from datetime import datetime
+import time
 
 
 class Card:
@@ -297,6 +297,9 @@ class Game:
         Returns: (success, player_id, error_message)
         """
         import uuid
+
+        player_id = str(uuid.uuid4())[:8]
+        now = time.monotonic()
         
         # Check if there's a disconnected player slot available and take it
         disconnected_pid = None
@@ -306,11 +309,14 @@ class Game:
                 break
 
         if disconnected_pid:
-            # Rejoin as the disconnected player with new name
-            player_id = disconnected_pid
+            # Rejoin as the disconnected player with new id and name
+            self.players[player_id] = self.players[disconnected_pid]
+            self.players.pop(disconnected_pid)
+            del self.last_heartbeat[disconnected_pid]
+
             self.players[player_id]['name'] = player_name
             self.players[player_id]['connected'] = True
-            self.last_heartbeat[player_id] = datetime.now().timestamp()
+            self.last_heartbeat[player_id] = now
             return (True, player_id, None)
 
         # Check if game is full (3 connected players)
@@ -318,7 +324,6 @@ class Game:
         if len(connected_players) >= 3:
             return (False, None, 'Game is full')
 
-        player_id = str(uuid.uuid4())[:8]
         self.players[player_id] = {
             'name': player_name,
             'hand': [],
@@ -326,7 +331,7 @@ class Game:
             'landlord_cards': [],
             'connected': True
         }
-        self.last_heartbeat[player_id] = datetime.now().timestamp()
+        self.last_heartbeat[player_id] = now
         return (True, player_id, None)
 
     def bid_landlord(self, player_id, action):

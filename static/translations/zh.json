@@ -72,5 +72,6 @@
 
   "lobby_browser_title": "房间列表",
   "error_lobby_refresh": "发生错误，请重新加载页面并检查网络连接",
-  "no_lobbies_found": "没有找到房间"
+  "no_lobbies_found": "没有找到房间",
+  "game_full_disconnect": "无法重新连接"
 }
